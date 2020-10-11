@@ -1,4 +1,4 @@
-package com.testapp5;
+package com.reactnativercu;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "TestApp5";
+    return "ReactNativeRCU";
   }
 }
