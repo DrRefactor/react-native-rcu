@@ -5,10 +5,15 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "yarn reset-cache && react-native start --reset-cache",
+    "reset-cache": "rm -rf /tmp/metro-* && watchman watch-del-all",
     "test": "jest",
     "lint": "eslint .",
-    "yalc-link": "yalc link react-native-focus-kit"
+    "yalc-reinstall": "yarn yalc-add && yarn",
+    "yalc-add": "yalc add react-native-focus-kit",
+    "--yalc-add-pure": "yalc add react-native-focus-kit --pure",
+    "--yalc-link": "yalc link react-native-focus-kit",
+    "--yalc-update": "yalc update"
   },
   "dependencies": {
     "react": "16.13.1",
