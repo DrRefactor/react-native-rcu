@@ -1,6 +1,12 @@
 import React, {useMemo} from 'react';
 import {range} from '../src/utils';
-import {Text, View, useTVEventHandler} from 'react-native';
+import {
+  Text,
+  View,
+  useTVEventHandler,
+  Platform,
+  PlatformOSType,
+} from 'react-native';
 
 import {
   MainFocusController,
@@ -14,22 +20,40 @@ type EmitterPayload = {
   [ArrowKeyEvent.Press]: ArrowKey;
 };
 
-const tvOSKeyMap: Record<string, ArrowKey> = {
+const defaultKeyMap: Record<string, ArrowKey> = {
   up: ArrowKey.ArrowUp,
   down: ArrowKey.ArrowDown,
   left: ArrowKey.ArrowLeft,
   right: ArrowKey.ArrowRight,
 };
 
+enum AndroidKeyAction {
+  KeyDown = 0,
+  KeyUp = 1,
+}
+
+const focusAction: Record<PlatformOSType, unknown> = {
+  ios: undefined,
+  android: AndroidKeyAction.KeyDown,
+
+  macos: undefined,
+  web: undefined,
+  windows: undefined,
+};
+
+function isFocusAction(action?: number) {
+  return focusAction[Platform.OS] === action;
+}
+
 function useArrowEmitter() {
   const emitter = useEmitter<ArrowKeyEvent.Press, EmitterPayload>();
 
   useTVEventHandler((event) => {
     if (['up', 'down', 'right', 'left'].includes(event.eventType)) {
-      console.log('ARROW EVENT', event.eventType);
+      console.log('ARROW EVENT', event.eventType, event.eventKeyAction);
     }
-    const mappedKey = tvOSKeyMap[event.eventType];
-    if (mappedKey) {
+    const mappedKey = defaultKeyMap[event.eventType];
+    if (mappedKey && isFocusAction(event.eventKeyAction)) {
       emitter.emit(ArrowKeyEvent.Press, mappedKey);
     }
   });
