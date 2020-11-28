@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {range} from '../src/utils';
 import {
   Text,
@@ -6,6 +6,8 @@ import {
   useTVEventHandler,
   Platform,
   PlatformOSType,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 
 import {
@@ -15,6 +17,10 @@ import {
 } from 'react-native-focus-kit';
 import {useEmitter} from '../src/hooks/useEmitter';
 import {ArrowKey, ArrowKeyEvent} from 'react-native-focus-kit';
+import {useFunction} from '../src/hooks/useFunction';
+import ImperativeScrollView, {
+  ImperativeScrollViewInterface,
+} from '../src/ImperativeScrollView';
 
 type EmitterPayload = {
   [ArrowKeyEvent.Press]: ArrowKey;
@@ -69,37 +75,53 @@ function useArrowEmitter() {
 
 export const SimpleGrid: React.FC = () => {
   const arrowEmitter = useArrowEmitter();
+  const scrollViewRef = useRef<ImperativeScrollViewInterface>(null);
+
+  const onFocus = useFunction(async (view?: View | null) => {
+    if (!view || !scrollViewRef.current) {
+      return;
+    }
+    scrollViewRef.current.scrollToView(view);
+  });
   return (
     <MainFocusController arrowKeyEventEmitter={arrowEmitter}>
-      <FocusableLayer
+      <ImperativeScrollView
+        ref={scrollViewRef}
         style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}>
-        {range(50).map((i) => (
-          <Focusable
-            style={{
-              borderWidth: 1,
-              borderColor: 'cyan',
-              borderRadius: 40,
-              borderStyle: 'solid',
-              width: 250,
-              height: 250,
-              margin: 25,
-            }}
-            key={i}
-            focusedStyle={{backgroundColor: 'cyan'}}>
-            <View>
+          height: Dimensions.get('window').height,
+      }}>
+        <FocusableLayer
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}>
+          {range(50).map((i) => (
+            <Focusable
+              style={{
+                borderWidth: 1,
+                borderColor: 'cyan',
+                borderRadius: 40,
+                borderStyle: 'solid',
+                width: 250,
+                height: 250,
+                margin: 25,
+              }}
+              key={i}
+              focusedStyle={{backgroundColor: 'cyan'}}
+              onFocus={onFocus}>
               <Text>Focusable {i}</Text>
-            </View>
-          </Focusable>
-        ))}
-      </FocusableLayer>
+              <TouchableOpacity
+                style={{backgroundColor: 'red', width: 50, height: 50}}
+              />
+            </Focusable>
+          ))}
+        </FocusableLayer>
+      </ImperativeScrollView>
     </MainFocusController>
   );
 };
