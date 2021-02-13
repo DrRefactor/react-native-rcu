@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {SafeAreaView, Platform, StatusBar, View} from 'react-native';
+import {Platform, StatusBar, View} from 'react-native';
 
 import {SimpleGrid} from './poc/Grid';
 import DPadOverrider from './src/DPadOverrider';
@@ -17,13 +17,11 @@ declare const global: {HermesInternal: null | {}};
 const App = () => {
   return (
     <DPadOverrider>
-      <SafeAreaView>
-        {!Platform.isTV && <StatusBar barStyle="dark-content" />}
-        <View collapsable={false}>
-          <FocusTrap />
-          <SimpleGrid />
-        </View>
-      </SafeAreaView>
+      {!Platform.isTV && <StatusBar barStyle="dark-content" />}
+      <View collapsable={false}>
+        <FocusTrap />
+        <SimpleGrid />
+      </View>
     </DPadOverrider>
   );
 };
