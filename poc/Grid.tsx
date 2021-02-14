@@ -89,10 +89,9 @@ export const SimpleGrid: React.FC = () => {
         ref={scrollViewRef}
         style={{
           height: Dimensions.get('window').height,
-      }}>
+        }}>
         <FocusableLayer
           style={{
-            width: '100%',
             height: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.8)',
             flexGrow: 1,
@@ -100,7 +99,7 @@ export const SimpleGrid: React.FC = () => {
             flexDirection: 'row',
             flexWrap: 'wrap',
           }}>
-          {range(50).map((i) => (
+          {range(10).map((i) => (
             <Focusable
               style={{
                 borderWidth: 1,
@@ -110,14 +109,42 @@ export const SimpleGrid: React.FC = () => {
                 width: 250,
                 height: 250,
                 margin: 25,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
               key={i}
               focusedStyle={{backgroundColor: 'cyan'}}
               onFocus={onFocus}>
-              <Text>Focusable {i}</Text>
-              <TouchableOpacity
-                style={{backgroundColor: 'red', width: 50, height: 50}}
-              />
+              <Text style={{marginBottom: 'auto', fontSize: 32}}>
+                Logical [{i}]
+              </Text>
+              <TouchableOpacity style={{backgroundColor: 'red', width: 200}}>
+                <Text style={{fontSize: 32}}>Native [{i}]</Text>
+              </TouchableOpacity>
+            </Focusable>
+          ))}
+          {range(50).map((i) => (
+            <Focusable
+              style={{
+                borderWidth: 1,
+                borderColor: 'cyan',
+                borderRadius: 40,
+                borderStyle: 'solid',
+                width: 50 + Math.random() * 100,
+                height: 50 + Math.random() * 100,
+                margin: 25,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              key={i}
+              focusedStyle={{backgroundColor: 'cyan'}}
+              onFocus={onFocus}>
+              <Text style={{marginBottom: 'auto', fontSize: 12}}>
+                Logical [{i}]
+              </Text>
+              <TouchableOpacity style={{backgroundColor: 'red', width: 50}}>
+                <Text style={{fontSize: 12}}>Native [{i}]</Text>
+              </TouchableOpacity>
             </Focusable>
           ))}
         </FocusableLayer>
