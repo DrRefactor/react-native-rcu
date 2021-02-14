@@ -1,6 +1,7 @@
 import React, {useImperativeHandle, useRef} from 'react';
 import {
   Animated,
+  Easing,
   findNodeHandle,
   ScrollView,
   StyleProp,
@@ -32,11 +33,29 @@ export type ImperativeScrollViewInterface = {
   scrollToView: (view: View) => void;
 };
 
+function useAnimateTo(value: Animated.Value) {
+  const animateTo = useFunction((to: number) => {
+    const animation = Animated.timing(value, {
+      toValue: to,
+      useNativeDriver: true,
+      duration: 500,
+      easing: Easing.inOut(Easing.sin),
+    });
+    animation.start();
+    // value.setValue(to);
+  });
+
+  return {
+    animateTo,
+  };
+}
+
 const ImperativeScrollView = (
   props: Props,
   ref: React.Ref<ImperativeScrollViewInterface>,
 ) => {
   const scrollPosition = useRef(new Animated.Value(0));
+  const {animateTo} = useAnimateTo(scrollPosition.current);
 
   const containerRef = useRef<View>(null);
 
@@ -46,7 +65,7 @@ const ImperativeScrollView = (
     }
     const position = await measureLayout(view, containerRef.current);
 
-    scrollPosition.current.setValue(-position);
+    animateTo(-position);
   });
 
   useImperativeHandle(
