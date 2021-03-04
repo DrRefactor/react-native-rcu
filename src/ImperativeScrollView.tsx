@@ -79,7 +79,6 @@ const ImperativeScrollView = (
   return (
     <View
       collapsable={false}
-      ref={containerRef}
       style={[
         {
           overflow: 'hidden',
@@ -87,6 +86,7 @@ const ImperativeScrollView = (
         props.style,
       ]}>
       <Animated.View
+        ref={containerRef}
         style={{
           transform: [
             {translateY: scrollPosition.current},
