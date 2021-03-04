@@ -9,9 +9,9 @@
 import React from 'react';
 import {Platform, StatusBar, View} from 'react-native';
 
-import {SimpleGrid} from './poc/Grid';
-import DPadOverrider from './src/DPadOverrider';
-import FocusTrap from './src/FocusTrap';
+import {SimpleGrid} from '../poc/Grid';
+import DPadOverrider from './DPadOverrider';
+import FocusTrap from './FocusTrap';
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
