@@ -14,6 +14,7 @@ import {
   MainFocusController,
   FocusableLayer,
   Focusable,
+  useWebArrowsEmitter,
 } from 'react-native-focus-kit';
 import {useEmitter} from '../src/hooks/useEmitter';
 import {ArrowKey, ArrowKeyEvent} from 'react-native-focus-kit';
@@ -73,8 +74,10 @@ function useArrowEmitter() {
   );
 }
 
+const usePlatformEmitter = Platform.OS === 'web' ? useWebArrowsEmitter : useArrowEmitter;
+
 export const SimpleGrid: React.FC = () => {
-  const arrowEmitter = useArrowEmitter();
+  const arrowEmitter = usePlatformEmitter();
   const scrollViewRef = useRef<ImperativeScrollViewInterface>(null);
 
   const onFocus = useFunction(async (view?: View | null) => {
